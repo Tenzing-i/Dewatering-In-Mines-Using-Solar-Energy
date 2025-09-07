@@ -1,0 +1,30 @@
+// Mini Dewatering Project Code
+// Equipment: Arduino + Moisture Sensor + Relay Module + Motor Pump + Solar Panel
+
+int sensorPin = A0;     // Moisture sensor connected to Analog pin A0
+int relayPin  = 7;      // Relay IN pin connected to digital pin 7
+int sensorValue = 0;    // Variable to store sensor reading
+int threshold   = 500;  // Set threshold (adjust according to testing)
+
+void setup() {
+  pinMode(relayPin, OUTPUT);
+  digitalWrite(relayPin, HIGH); // Keep motor OFF initially (Relay LOW = ON in most modules)
+  Serial.begin(9600);
+}
+
+void loop() {
+  sensorValue = analogRead(sensorPin); // Read moisture sensor value
+  Serial.print("Moisture Value: ");
+  Serial.println(sensorValue);
+
+  // If moisture is above threshold (meaning water present)
+  if (sensorValue > threshold) {
+    digitalWrite(relayPin, LOW);  // Turn ON motor (pump water out)
+    Serial.println("Water detected! Pump ON");
+  } else {
+    digitalWrite(relayPin, HIGH); // Turn OFF motor
+    Serial.println("Dry condition! Pump OFF");
+  }
+
+  delay(1000); // Wait 1 second before next reading
+}
